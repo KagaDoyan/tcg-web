@@ -1,101 +1,119 @@
-import Image from "next/image";
+// pages/index.js
+import BannerSlider, { ImageData } from '@/components/ui/banner_slider';
+import Head from 'next/head';
+
+
+import image1 from "@/static/1.jpg";
+import image2 from "@/static/2.jpg";
+import image3 from "@/static/3.jpg";
+import ItemCard from '@/components/ui/item_card';
+const banner_data: ImageData[] = [
+  { src: image1, href: null },
+  { src: image2, href: null },
+  { src: image3, href: null },
+];
+
+const trendingListings = [
+  {
+    id: 4,
+    name: 'Shadow Assassin',
+    image: 'https://m.media-amazon.com/images/I/51vQyPks23L._AC_UF894,1000_QL80_.jpg',
+    description: 'Strike swiftly with the Shadow Assassin.',
+    price: '0.40'
+  },
+  {
+    id: 5,
+    name: 'Crystal Guardian',
+    image: 'https://m.media-amazon.com/images/I/51vQyPks23L._AC_UF894,1000_QL80_.jpg',
+    description: 'Guard the realms with the Crystal Guardian.',
+    price: '0.39'
+  },
+  {
+    id: 6,
+    name: 'Storm Bringer',
+    image: 'https://m.media-amazon.com/images/I/51vQyPks23L._AC_UF894,1000_QL80_.jpg',
+    description: 'Bring the storm to your opponents.',
+    price: '0.41'
+  },
+];
+
+const newArrivals = [
+  {
+    id: 7,
+    name: 'Solar Knight',
+    image: '/images/solar-knight.jpg',
+    description: 'Shine bright on the battlefield.',
+  },
+  {
+    id: 8,
+    name: 'Lunar Sorcerer',
+    image: '/images/lunar-sorcerer.jpg',
+    description: 'Harness the power of the moon.',
+  },
+  {
+    id: 9,
+    name: 'Ethereal Spirit',
+    image: '/images/ethereal-spirit.jpg',
+    description: 'An enigma on the field.',
+  },
+];
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <>
+      <Head>
+        <title>Trading Card Game Hub</title>
+        <meta
+          name="description"
+          content="Discover featured cards, trending listings, and new arrivals."
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <main className="container mx-auto px-4 py-8">
+        <header className="text-center mb-12">
+          <h1 className="text-4xl font-bold">Trading Card Game Hub</h1>
+          <p className="text-gray-600 mt-4">
+            Discover, collect, and trade your favorite cards.
+          </p>
+        </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+        {/* Featured Cards */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4 text-center">Featured</h2>
+          <BannerSlider images={banner_data} />
+        </section>
+
+        {/* Trending Listings */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Trending Listings</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {trendingListings.map((card) => (
+              <ItemCard item={{ name: card.name, image: card.image, description: card.description, price: card.price, title: card.name }} />
+            ))}
+          </div>
+        </section>
+
+        {/* New Arrivals */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">New Arrivals</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {newArrivals.map((card) => (
+              <div key={card.id} className="bg-white rounded-lg shadow overflow-hidden">
+                <img
+                  src={card.image}
+                  alt={card.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-xl font-bold">{card.name}</h3>
+                  <p className="text-gray-600">{card.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+    </>
   );
 }
