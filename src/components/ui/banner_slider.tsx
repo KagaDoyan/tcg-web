@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 // Interface for image data
 export interface ImageData {
   src: StaticImageData;
-  href: string | null
+  href: string | null;
 }
 
 // Props interface with optional slideTimer and required images array
@@ -52,7 +52,7 @@ export default function BannerSlider({
     <div className="relative w-full mx-auto mt-4">
       {/* Slider Container */}
       <div
-        className="relative overflow-hidden group mx-12 rounded-xl"
+        className="relative overflow-hidden group sm:mx-0.5 rounded-xl"
         onMouseOver={handleMouseOver}
         onMouseLeave={handleMouseLeave}
       >
@@ -62,7 +62,7 @@ export default function BannerSlider({
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {images.map((image, index) => (
-            <div key={index} className="relative w-full h-[300px] flex-shrink-0">
+            <div key={index} className="relative w-full h-[150px] sm:h-[300px] flex-shrink-0">
               <a href={image.href || "#"}>
                 <Image
                   src={image.src}

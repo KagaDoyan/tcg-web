@@ -87,13 +87,6 @@ body {
   }
 }
 
-.custom-dashed {
-  border-bottom: 1px solid transparent; /* Adjust thickness as needed */
-  border-image: repeating-linear-gradient(
-    to right,
-    rgb(79, 79, 79),
-    rgb(79, 79, 79) 8px,       /* Dash length */
-    transparent 5px, 
-    transparent 12px  /* Total length (dash + gap) */
-  ) 1;
+html {
+  scroll-behavior: smooth;
 }
