@@ -143,9 +143,9 @@ export default function ProductPage({ name }: PageProps) {
 
                                 {/* Add to Cart Button */}
                                 <div className="sm:w-1/3 flex justify-end">
-                                    <button className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                                    <Button className="px-6 py-2 hover:bg-muted-foreground transition">
                                         Add to Cart
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
 
@@ -166,9 +166,9 @@ export default function ProductPage({ name }: PageProps) {
                                     <span className="text-sm text-gray-500">+ $2.99 shipping</span>
                                 </div>
                                 <div className="sm:w-1/3 flex justify-end">
-                                    <button className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                                    <Button className="px-6 py-2 hover:bg-muted-foreground transition">
                                         Add to Cart
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -195,7 +195,7 @@ export default function ProductPage({ name }: PageProps) {
 
             <div className="order-4 sm:order-none col-span-4 p-4">
                 <h4 className="text-2xl font-bold">People also buy</h4>
-                <AlsoBuy name={decode_name}/>
+                <AlsoBuy name={decode_name} />
             </div>
         </div >
     );

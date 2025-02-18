@@ -107,7 +107,7 @@ export default function AlsoBuy({ name }: AlsoBuyProp) {
                             key={index}
                             onClick={() => handleDotClick(index)} // Click handler for dot
                             className={`w-5 h-5 sm:w-3 sm:h-3 rounded-full cursor-pointer transition-colors duration-300 
-                  ${index === currentPage ? 'bg-blue-500' : 'bg-gray-400 hover:bg-blue-300'}`}
+                  ${index === currentPage ? 'bg-gray-950' : 'bg-gray-400 hover:bg-blue-300'}`}
                         ></span>
                     ))}
                 </div>
