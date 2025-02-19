@@ -23,7 +23,7 @@ export default function RootLayout({
     <>
       <SiteHeader />
       <main className="flex-grow">
-        {children}
+      <div className="max-w-[1440px] mx-auto items-center">{children}</div>
       </main>
       <Footer />
     </>

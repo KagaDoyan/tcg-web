@@ -11,6 +11,7 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 import { CartesianGrid, LabelList, Line, LineChart, XAxis, YAxis } from "recharts"
+import { fetchCardData } from "@/app/api/yugioh/getall";
 
 const chartConfig = {
     averagePrice: {
@@ -60,20 +61,11 @@ export default function ProductPage({ name, category }: PageProps) {
     const fetchCardInfo = async () => {
         if (category === "YuGiOh") {
             try {
-                const response = await fetch(
-                    `https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=${encodeURIComponent(name)}`,
-                    { method: "GET" }
-                );
-
-                if (!response.ok) {
-                    throw new Error(`Error fetching card info: ${response.status}`);
-                }
-
-                // Parse the JSON from the response
-                const data = await response.json();
+                const data = await fetchCardData();
 
                 // For example, if you want the first card from the data array:
-                const card = data.data[0];
+
+                const card = data.filter((card: any) => card.name === decode_name)[0];
 
                 // Update state with the fetched card information
                 setCardInfo(card);
@@ -120,8 +112,11 @@ export default function ProductPage({ name, category }: PageProps) {
             <div className="order-2 p-10 pt-4 col-span-4 sm:order-none sm:row-span-2 sm:col-span-1 bg-muted rounded-lg">
                 <img
                     className="object-cover"
-                    src={cardinfo?.card_images[0].image_url}
+                    src={cardinfo?.card_images[0]?.image_url || 'https://ms.yugipedia.com//thumb/e/e5/Back-EN.png/257px-Back-EN.png'}
                     alt={decode_name}
+                    onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://ms.yugipedia.com//thumb/e/e5/Back-EN.png/257px-Back-EN.png';
+                    }}
                 />
             </div>
 

@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/drawer"
 
 // lucide-react icons
-import { Search, ShoppingCart, User, Menu } from "lucide-react"
+import { Search, ShoppingCart, User, Menu, Heart } from "lucide-react"
 import logo from '@/static/logo.png'
 
 export function SiteHeader() {
@@ -89,7 +89,7 @@ export function SiteHeader() {
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2 p-2">
           <h2 className="text-center font-bold hidden md:block">
-            WitchCraft <br />Player
+            WitchCraft <br /> Player
           </h2>
           <Image
             src={logo}
@@ -101,7 +101,7 @@ export function SiteHeader() {
         </Link>
 
         {/* Desktop Search Bar (only on sm and up) */}
-        <div className="flex-1 hidden sm:block">
+        <div className="hidden sm:block flex-1">
           <div className="relative w-full">
             <Input type="text" placeholder="Search..." className="pr-10" />
             <Button variant="ghost" size="icon" className="absolute right-0 top-0 h-full">
@@ -112,8 +112,8 @@ export function SiteHeader() {
 
         {/* Right Side: Sign in, Wishlist, Cart (always visible) */}
         <div className="ml-auto flex items-center space-x-4">
-          <Link href="/cart" className="hover:underline">
-            <ShoppingCart className="h-5 w-5" />
+          <Link href="/wishlist" className="hover:underline">
+            <Heart className="h-5 w-5" />
           </Link>
           <Link href="/sign-in" className="flex items-center space-x-1 hover:underline">
             <User className="h-4 w-4" />
@@ -121,6 +121,8 @@ export function SiteHeader() {
           </Link>
         </div>
       </div>
+
+
 
       {/* Mobile Search Bar (visible below header on mobile) */}
       <div className="sm:hidden bg-white px-4 py-2">
@@ -137,7 +139,7 @@ export function SiteHeader() {
         <div className="container mx-auto">
           <ul className="flex justify-center space-x-4">
             <li>
-              <a href="#" className="hover:underline">
+              <a href="/product/YuGiOh" className="hover:underline">
                 Yu-Gi-Oh!
               </a>
             </li>

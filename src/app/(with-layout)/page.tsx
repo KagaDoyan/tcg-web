@@ -1,5 +1,5 @@
 import { Featured } from '@/components/featured/featured';
-import { Trending } from '@/components/trending/trending';
+import Trending from '@/components/trending/trending';
 import Head from 'next/head';
 
 export default function Home() {
@@ -25,9 +25,6 @@ export default function Home() {
         <Featured />
 
         {/* Trending Listings */}
-        <Trending />
-
-        {/* New Arrivals */}
         <Trending />
       </main>
     </>
