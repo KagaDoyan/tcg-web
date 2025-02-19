@@ -1,15 +1,51 @@
 // app/product/[name]/page.tsx
 'use client'
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { useRef } from "react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useRef, useState } from "react";
 import AlsoBuy from "./also-buy/also-buy";
+import {
+    ChartConfig,
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/components/ui/chart"
+import { CartesianGrid, LabelList, Line, LineChart, XAxis, YAxis } from "recharts"
+
+const chartConfig = {
+    averagePrice: {
+        label: "Price",
+        color: "hsl(var(--primary))",
+    },
+} satisfies ChartConfig
 
 interface PageProps {
     name: string;
+    category: string;
 }
 
-export default function ProductPage({ name }: PageProps) {
+type DataItem = {
+    seller: string;
+    date: string;
+    item_name: string;
+    price: number;
+};
+
+const data: DataItem[] = [
+    { seller: 'Alice Smith', date: '2025-02-18', item_name: 'Smartphone', price: 0.50 },
+    { seller: 'Bob Johnson', date: '2025-02-18', item_name: 'Smartphone', price: 0.50 },
+    { seller: 'Carol White', date: '2025-02-18', item_name: 'Smartphone', price: 0.59 },
+    { seller: 'Alice Smith', date: '2025-02-19', item_name: 'Smartphone', price: 0.50 },
+    { seller: 'Bob Johnson', date: '2025-02-19', item_name: 'Smartphone', price: 0.50 },
+    { seller: 'Carol White', date: '2025-02-19', item_name: 'Smartphone', price: 0.45 },
+    { seller: 'Alice Smith', date: '2025-02-20', item_name: 'Smartphone', price: 0.44 },
+    { seller: 'Bob Johnson', date: '2025-02-20', item_name: 'Smartphone', price: 0.40 },
+    { seller: 'Carol White', date: '2025-02-20', item_name: 'Smartphone', price: 0.40 },
+    { seller: 'Alice Smith', date: '2025-02-21', item_name: 'Smartphone', price: 0.40 },
+];
+
+
+export default function ProductPage({ name, category }: PageProps) {
     const decode_name = decodeURIComponent(name);
 
     const listingRef = useRef<HTMLDivElement>(null);
@@ -19,8 +55,60 @@ export default function ProductPage({ name }: PageProps) {
         listingRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
+    //card info
+    const [cardinfo, setCardInfo] = useState<any>()
+    const fetchCardInfo = async () => {
+        if (category === "YuGiOh") {
+            try {
+                const response = await fetch(
+                    `https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=${encodeURIComponent(name)}`,
+                    { method: "GET" }
+                );
+
+                if (!response.ok) {
+                    throw new Error(`Error fetching card info: ${response.status}`);
+                }
+
+                // Parse the JSON from the response
+                const data = await response.json();
+
+                // For example, if you want the first card from the data array:
+                const card = data.data[0];
+
+                // Update state with the fetched card information
+                setCardInfo(card);
+
+                // If you want to store the whole array, you could do:
+                // setCardInfo(data.data);
+            } catch (error) {
+                console.error("Failed to fetch card info:", error);
+                // Optionally, set an error state here for your UI
+            }
+        }
+    }
+
+    useEffect(() => {
+        fetchCardInfo()
+    }, [])
+
 
     //listing
+
+    //market history
+    const averagePriceByDate = Object.values(
+        data.reduce((acc, item) => {
+            if (!acc[item.date]) {
+                acc[item.date] = { date: item.date, total: 0, count: 0 };
+            }
+            acc[item.date].total += item.price;
+            acc[item.date].count += 1;
+            return acc;
+        }, {} as Record<string, { date: string; total: number; count: number }>)
+    ).map(entry => ({
+        date: entry.date,
+        averagePrice: entry.total / entry.count,
+        sold: entry.count,
+    }));
 
     return (
         <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-3 sm:grid-rows-[auto,1fr]">
@@ -32,19 +120,19 @@ export default function ProductPage({ name }: PageProps) {
             <div className="order-2 p-10 pt-4 col-span-4 sm:order-none sm:row-span-2 sm:col-span-1 bg-muted rounded-lg">
                 <img
                     className="object-cover"
-                    src="https://m.media-amazon.com/images/I/51vQyPks23L._AC_UF894,1000_QL80_.jpg"
+                    src={cardinfo?.card_images[0].image_url}
                     alt={decode_name}
                 />
             </div>
 
             <div className="order-3 col-span-4 sm:order-none sm:col-span-2 sm:col-start-2 sm:row-start-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
+                <div className="col-span-2 lg:col-span-1">
                     <h6 className="text-lg font-bold">Product Details</h6>
                     <p className="text-justify p-1 sm:text-left leading-relaxed sm:leading-loose text-base sm:text-md tracking-wide">
-                        During damage calculation, if your Spellcaster monster battles an opponent's monster (Quick Effect): You can reveal any number of Spells with different names in your hand, and if you do, your battling monster gains 1000 ATK/DEF for each card revealed, until the end of this turn. (Quick Effect): You can discard 1 Spell; negate the effects of all face-up monsters your opponent currently controls, until the end of this turn. You can only use each effect of "Witchcrafter Madame Verre" once per turn.
+                        {cardinfo?.desc}
                     </p>
                 </div>
-                <div>
+                <div className="col-span-2 lg:col-span-1">
                     <Card className="p-4 border rounded-lg shadow-sm">
                         <CardContent className="space-y-3">
                             {/* Title */}
@@ -76,6 +164,55 @@ export default function ProductPage({ name }: PageProps) {
                                     about shipping or another extra payment please contact seller for more info.
                                 </p>
                             </div>
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="col-span-2">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Market Price History</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <ChartContainer config={chartConfig}>
+                                <LineChart
+                                    accessibilityLayer
+                                    data={averagePriceByDate}
+                                    margin={{
+                                        left: 12,
+                                        right: 12,
+                                    }}
+                                >
+                                    <CartesianGrid vertical={false} />
+                                    <XAxis
+                                        dataKey="date"
+                                        tickLine={true}
+                                        axisLine={true}
+                                        tickMargin={8}
+                                    // tickFormatter={(value) => value}
+                                    />
+                                    <YAxis dataKey="averagePrice" tickFormatter={(value) => value.toFixed(2)} />
+                                    <ChartTooltip
+                                        cursor={false}
+                                        content={<ChartTooltipContent hideLabel />}
+                                    />
+                                    <Line
+                                        dataKey="averagePrice"
+                                        activeDot={{
+                                            r: 6,
+                                        }}
+                                    >
+                                        <LabelList
+                                            dataKey="averagePrice"
+                                            position="top"
+                                            offset={12}
+                                            className="fill-foreground"
+                                            fontSize={12}
+                                            formatter={(value: number) => value.toFixed(2)} // Format to 2 decimal places
+                                        />
+                                    </Line>
+                                    {/* <Bar dataKey="sold" barSize={20} fill="#413ea0" /> */}
+                                </LineChart>
+                            </ChartContainer>
                         </CardContent>
                     </Card>
                 </div>

@@ -115,7 +115,7 @@ export function SiteHeader() {
           <Link href="/cart" className="hover:underline">
             <ShoppingCart className="h-5 w-5" />
           </Link>
-          <Link href="/signin" className="flex items-center space-x-1 hover:underline">
+          <Link href="/sign-in" className="flex items-center space-x-1 hover:underline">
             <User className="h-4 w-4" />
             <span>Sign in</span>
           </Link>

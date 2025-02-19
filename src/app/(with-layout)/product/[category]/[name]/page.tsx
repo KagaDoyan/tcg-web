@@ -1,20 +1,19 @@
 // app/product/[name]/page.tsx
 
 import ProductPage from "@/components/product/productPage";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 
 interface PageProps {
-  params: { name: string };
+  params: { name: string, category: string };
 }
 
 export default function Page({ params }: PageProps) {
-  const { name } = params;
+  const { name, category } = params;
   const decode_name = decodeURIComponent(name);
+  const decodedCategory = decodeURIComponent(category);
 
   return (
     <div>
-      <ProductPage name={decode_name} />
+      <ProductPage name={decode_name} category={decodedCategory} />
     </div>
   );
 }
