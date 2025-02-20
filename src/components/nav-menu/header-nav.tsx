@@ -6,13 +6,7 @@ import Image from "next/image"
 // shadcn/ui components
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select"
+import { Categories } from "../card-category/card-categorylist"
 import {
   Drawer,
   DrawerTrigger,
@@ -138,36 +132,13 @@ export function SiteHeader() {
       <div className="hidden sm:block bg-gray-900 text-white py-4 dark:bg-slate-600">
         <div className="container mx-auto">
           <ul className="flex justify-center space-x-4">
-            <li>
-              <a href="/product/YuGiOh" className="hover:underline">
-                Yu-Gi-Oh!
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:underline">
-                Magic
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:underline">
-                Pokémon
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:underline">
-                Cardfight!! Vanguard
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:underline">
-                Weiß Schwarz
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:underline">
-                More
-              </a>
-            </li>
+            {Categories?.map((category, index) => (
+              <li>
+                <a key={index} href={`/product/${category.name}`} className="hover:underline">
+                  {category.fancy_name}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

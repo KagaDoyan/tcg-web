@@ -11,7 +11,8 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 import { CartesianGrid, LabelList, Line, LineChart, XAxis, YAxis } from "recharts"
-import { fetchCardData } from "@/app/api/yugioh/getall";
+import { fetchCardData as fetchYuGiOhData } from "@/app/api/yugioh/getall";
+import { fetchCardData as fetchWeissData } from "@/app/api/weiss/getall";
 
 const chartConfig = {
     averagePrice: {
@@ -48,6 +49,7 @@ const data: DataItem[] = [
 
 export default function ProductPage({ name, category }: PageProps) {
     const decode_name = decodeURIComponent(name);
+    const [imgError, setImgError] = useState(false);
 
     const listingRef = useRef<HTMLDivElement>(null);
 
@@ -61,20 +63,33 @@ export default function ProductPage({ name, category }: PageProps) {
     const fetchCardInfo = async () => {
         if (category === "YuGiOh") {
             try {
-                const data = await fetchCardData();
-
-                // For example, if you want the first card from the data array:
-
+                const data = await fetchYuGiOhData();
                 const card = data.filter((card: any) => card.name === decode_name)[0];
 
                 // Update state with the fetched card information
-                setCardInfo(card);
-
-                // If you want to store the whole array, you could do:
-                // setCardInfo(data.data);
+                setCardInfo({
+                    name: card.name,
+                    image: card.card_images[0].image_url,
+                    description: card.desc,
+                    market_price: card.card_prices[0].cardmarket_price
+                });
             } catch (error) {
                 console.error("Failed to fetch card info:", error);
-                // Optionally, set an error state here for your UI
+            }
+        }
+
+        if (category === "WeissSchwarz") {
+            try {
+                const data = await fetchWeissData();
+                const card = data.filter((card: any) => card.name.toLowerCase().includes(decode_name.toLocaleLowerCase()))[0];
+                setCardInfo({
+                    name: card?.name,
+                    image: card?.image,
+                    description: card?.ability.join(" "),
+                    market_price: card?.cardmarket_price
+                });
+            } catch (error) {
+                console.error("Failed to fetch card info:", error);
             }
         }
     }
@@ -110,21 +125,25 @@ export default function ProductPage({ name, category }: PageProps) {
             </div>
 
             <div className="order-2 p-10 pt-4 col-span-4 sm:order-none sm:row-span-2 sm:col-span-1 bg-muted rounded-lg">
-                <img
-                    className="object-cover"
-                    src={cardinfo?.card_images[0]?.image_url || 'https://ms.yugipedia.com//thumb/e/e5/Back-EN.png/257px-Back-EN.png'}
-                    alt={decode_name}
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://ms.yugipedia.com//thumb/e/e5/Back-EN.png/257px-Back-EN.png';
-                    }}
-                />
+                {!imgError ? (
+                    <img
+                        className="object-cover"
+                        src={cardinfo?.image}
+                        alt={decode_name}
+                        onError={() => setImgError(true)}
+                    />
+                ) : (
+                    <div className="flex items-center justify-center bg-blue-500 h-64 w-64">
+                        <span className="text-white">{decode_name}</span>
+                    </div>
+                )}
             </div>
 
             <div className="order-3 col-span-4 sm:order-none sm:col-span-2 sm:col-start-2 sm:row-start-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="col-span-2 lg:col-span-1">
                     <h6 className="text-lg font-bold">Product Details</h6>
                     <p className="text-justify p-1 sm:text-left leading-relaxed sm:leading-loose text-base sm:text-md tracking-wide">
-                        {cardinfo?.desc}
+                        {cardinfo?.description}
                     </p>
                 </div>
                 <div className="col-span-2 lg:col-span-1">
@@ -327,7 +346,7 @@ export default function ProductPage({ name, category }: PageProps) {
 
             <div className="order-4 sm:order-none col-span-4 p-4">
                 <h4 className="text-2xl font-bold">People also buy</h4>
-                <AlsoBuy name={decode_name} />
+                <AlsoBuy name={decode_name} category={category} />
             </div>
         </div >
     );

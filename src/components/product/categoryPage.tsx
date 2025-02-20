@@ -1,25 +1,26 @@
 'use client'
 
 import { useState } from 'react';
-import { Products } from '@/app/(with-layout)/product_demo'
+import { Products } from '@/app/product_demo'
 import image from '@/static/404.png'
 import Image from 'next/image';
 import { Button } from '../ui/button';
+import { Categories } from '../card-category/card-categorylist';
 
 interface PageProps {
     name: string;
 }
 
 export default function CategoryPage({ name }: PageProps) {
-    const detail = "I sense great potential in you. Build your deck, trust in the Heart of the Cards, and step into the arena. Prove your worth, and you may become the greatest Duelist! It's time to duel!. You can shop and buy Yu-Gi-Oh! cards and booster packs, Structure Decks, dueling accessories, and more from our site.";
-
     const itemsPerPage = 12;
     const [currentPage, setCurrentPage] = useState(1);
     const [orderBy, setOrderBy] = useState<'name' | 'price'>('name');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
+    const product_category = Products.find(category => category.category === name)
+
     // Sort and paginate the products
-    const sortedProducts = [...Products].sort((a, b) => {
+    const sortedProducts = product_category?.products ? [...product_category?.products ].sort((a, b) => {
         const orderFactor = sortOrder === 'asc' ? 1 : -1;
 
         if (orderBy === 'name') {
@@ -33,7 +34,9 @@ export default function CategoryPage({ name }: PageProps) {
         }
 
         return 0; // Default return (just in case)
-    });
+    }) : [];
+
+    const Category = Categories.find(category => category.name === name)
 
 
     const paginatedProducts = sortedProducts.slice(
@@ -55,8 +58,8 @@ export default function CategoryPage({ name }: PageProps) {
     return (
         <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-3 sm:grid-rows-[auto,1fr]">
             <div className="order-4 sm:order-none col-span-4 p-4 space-x-1">
-                <h4 className="text-2xl font-bold">Buy {name} Cards</h4>
-                <p>{detail}</p>
+                <h4 className="text-2xl font-bold">Buy {Category?.name} Cards</h4>
+                <p>{Category?.motto}</p>
             </div>
 
             <div className="order-4 sm:order-none col-span-4 p-4 space-y-4">
@@ -72,9 +75,9 @@ export default function CategoryPage({ name }: PageProps) {
                 </div>
 
                 {paginatedProducts?.length > 0 ? (
-                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {paginatedProducts?.map((product) => (
-                            <a href={`/product/YuGiOh/${product.name}`} key={product.name}>
+                            <a href={`/product/${Category?.name}/${product.name}`} key={product.name}>
                                 <div className="border rounded-lg shadow-md flex flex-col md:flex-row">
                                     <div className="md:w-1/3 w-full p-2">
                                         <img

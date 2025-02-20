@@ -18,7 +18,7 @@ export default function Trending() {
     return (
         <div className="mb-12">
             <h2 className="text-2xl font-semibold mb-4">Trending Listings</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {WitchCrafterCards?.map((card: any, index: number) => {
                     if (index > 11) return null;
                     return (

@@ -1,3 +1,4 @@
+import CardCategory from '@/components/card-category/card-category';
 import { Featured } from '@/components/featured/featured';
 import Trending from '@/components/trending/trending';
 import Head from 'next/head';
@@ -20,6 +21,8 @@ export default function Home() {
             Discover, collect, and trade your favorite cards.
           </p>
         </header>
+        {/* Cards Category */}
+        <CardCategory />
 
         {/* Featured Cards */}
         <Featured />

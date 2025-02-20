@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { Products } from "@/app/(with-layout)/product_demo";
+import { Products } from "@/app/product_demo";
 
 interface AlsoBuyProp {
     name: string;
+    category: string
 }
 
-export default function AlsoBuy({ name }: AlsoBuyProp) {
+export default function AlsoBuy({ name, category }: AlsoBuyProp) {
 
     const [currentPage, setCurrentPage] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(1);
@@ -16,7 +17,9 @@ export default function AlsoBuy({ name }: AlsoBuyProp) {
         return shuffled.slice(0, count); // Return the first 'count' items
     }
 
-    const randomProducts = getRandomProducts(Products, 12);
+    const product_category = Products.find(item => item.category === category)
+    const products = product_category?.products || []
+    const randomProducts = getRandomProducts(products, 12);
 
     useEffect(() => {
         const handleResize = () => {
