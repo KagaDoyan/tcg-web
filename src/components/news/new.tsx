@@ -4,7 +4,7 @@ interface PageProps {
 
 export default async function NewPage({ id }: PageProps) {
     return (
-        <div className="mx-auto p-8 bg-gray-100">
+        <div className="mx-auto p-8">
 
             <div className="text-center mb-6">
                 <h1 className="text-3xl font-bold text-gray-900">Why You Need to Play Witchcrafter in Yu-Gi-Oh!</h1>

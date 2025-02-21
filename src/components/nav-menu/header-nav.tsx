@@ -131,7 +131,7 @@ export function SiteHeader() {
       {/* Desktop Menu */}
       <div className="hidden sm:block bg-gray-900 text-white py-4 dark:bg-slate-600">
         <div className="container mx-auto">
-          <ul className="flex justify-center space-x-4">
+          <ul className="flex justify-center sm:space-x-4 md:space-x-8 lg:space-x-12">
             {Categories?.map((category, index) => (
               <li>
                 <a key={index} href={`/product/${category.name}`} className="hover:underline">
