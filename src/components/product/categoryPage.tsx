@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Products } from '@/app/product_demo'
 import image from '@/static/404.png'
 import Image from 'next/image';
@@ -11,7 +11,19 @@ interface PageProps {
     name: string;
 }
 
+
 export default function CategoryPage({ name }: PageProps) {
+
+    const newRef = useRef<HTMLDivElement>(null);
+    const BuyRef = useRef<HTMLDivElement>(null);
+    const DeckRef = useRef<HTMLDivElement>(null);
+
+    const handleScroll = (ref: any) => {
+        if (ref.current) {
+            ref.current?.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     const itemsPerPage = 12;
     const [currentPage, setCurrentPage] = useState(1);
     const [orderBy, setOrderBy] = useState<'name' | 'price'>('name');
@@ -20,7 +32,7 @@ export default function CategoryPage({ name }: PageProps) {
     const product_category = Products.find(category => category.category === name)
 
     // Sort and paginate the products
-    const sortedProducts = product_category?.products ? [...product_category?.products ].sort((a, b) => {
+    const sortedProducts = product_category?.products ? [...product_category?.products].sort((a, b) => {
         const orderFactor = sortOrder === 'asc' ? 1 : -1;
 
         if (orderBy === 'name') {
@@ -56,13 +68,65 @@ export default function CategoryPage({ name }: PageProps) {
     };
 
     return (
-        <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-3 sm:grid-rows-[auto,1fr]">
+        <div className="">
+            <div className='flex flex-row gap-4 order-1 sm:order-none border-b-2 p-4 text-center justify-center col-span-4'>
+                <p className="text-sm font-semibold cursor-pointer underline" onClick={() => handleScroll(newRef!)}>Forum</p>
+                <p className="text-sm font-semibold cursor-pointer underline" onClick={() => handleScroll(BuyRef!)}>Buy Cards</p>
+                <p className="text-sm font-semibold cursor-pointer underline" onClick={() => handleScroll(DeckRef!)}>Deck template</p>
+            </div>
             <div className="order-4 sm:order-none col-span-4 p-4 space-x-1">
                 <h4 className="text-2xl font-bold">Buy {Category?.name} Cards</h4>
                 <p>{Category?.motto}</p>
             </div>
-
-            <div className="order-4 sm:order-none col-span-4 p-4 space-y-4">
+            <div ref={newRef} className="order-4 sm:order-none col-span-4 p-4 space-y-4">
+                <h5 className="text-2xl font-bold">News & Updates</h5>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center gap-6">
+                    <a href={`/new/sample`} className='cursor-pointer'>
+                        <div className="flex flex-col border rounded-lg shadow-md bg-gray-50 min-h-56">
+                            <Image src={image} alt="404" className="w-full h-20 object-cover rounded-t-lg bg-gray-950" />
+                            <div className="flex flex-col p-4 flex-1">
+                                <h5 className="text-lg font-bold leading-tight tracking-tight">Why WitchCrafter is the best?</h5>
+                                <p className="text-sm text-gray-600">I'm going to tell you why come see for yourself.</p>
+                                <p className="text-xs mt-auto text-gray-400">by Hakase.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href={`/new/sample`} className='cursor-pointer'>
+                        <div className="flex flex-col border rounded-lg shadow-md bg-gray-50 min-h-56">
+                            <img src="https://pbs.twimg.com/media/FxPpZiNWcAA2uKo?format=jpg&name=4096x4096" alt="404" className="w-full h-20 object-cover rounded-t-lg bg-gray-950" />
+                            <div className="flex flex-col p-4 flex-1">
+                                <h5 className="text-lg font-bold leading-tight tracking-tight">Dark Dragon, Blue-eyes Magician</h5>
+                                <p className="text-sm text-gray-600">this is just nonsense are they even real cards, come find out.</p>
+                                <p className="text-xs mt-auto text-gray-400">by Hakase.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href={`/new/sample`} className='cursor-pointer'>
+                        <div className="flex flex-col border rounded-lg shadow-md bg-gray-50 min-h-56">
+                            <img src="https://i.ytimg.com/vi/Kwcj0GY8WVQ/mqdefault.jpg" alt="404" className="w-full h-20 object-cover rounded-t-lg bg-gray-950" />
+                            <div className="flex flex-col p-4 flex-1">
+                                <h5 className="text-lg font-bold leading-tight tracking-tight">Who need meta? You need waifu!</h5>
+                                <p className="text-sm text-gray-600">list of waifu cards you might interested come see.</p>
+                                <p className="text-xs mt-auto text-gray-400">by Hakase.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href={`/new/sample`} className='cursor-pointer'>
+                        <div className="flex flex-col border rounded-lg shadow-md bg-gray-50 min-h-56">
+                            <img src="https://preview.redd.it/gacrjhyggv4e1.jpeg?auto=webp&s=c41fd34afb415e84dead14e1658da7fa47f88519" alt="404" className="w-full h-20 object-cover rounded-t-lg bg-gray-950" />
+                            <div className="flex flex-col p-4 flex-1">
+                                <h5 className="text-lg font-bold leading-tight tracking-tight">Yet another cute deck you might want to try.</h5>
+                                <p className="text-sm text-gray-600">come check out this deck you will love it.</p>
+                                <p className="text-xs mt-auto text-gray-400">by Hakase.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div className="flex justify-end mt-4">
+                    <a href={`/news/${name}`} className="text-sm font-semibold cursor-pointer underline">See more</a>
+                </div>
+            </div>
+            <div ref={BuyRef} className="order-4 sm:order-none col-span-4 p-4 space-y-4">
                 <h5 className="text-2xl font-bold">Latest list in {name}</h5>
                 <div className="flex justify-end mb-4">
                     <div className="flex gap-4">
@@ -75,10 +139,10 @@ export default function CategoryPage({ name }: PageProps) {
                 </div>
 
                 {paginatedProducts?.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {paginatedProducts?.map((product) => (
-                            <a href={`/product/${Category?.name}/${product.name}`} key={product.name}>
-                                <div className="border rounded-lg shadow-md flex flex-col md:flex-row">
+                            <a href={`/product/${Category?.name}/${product.id || product.name}`} key={product.name}>
+                                <div className="border rounded-lg shadow-md min-h-96 sm:min-h-0 md:min-h-36 flex flex-col md:flex-row">
                                     <div className="md:w-1/3 w-full p-2">
                                         <img
                                             src={product.image}
@@ -166,6 +230,54 @@ export default function CategoryPage({ name }: PageProps) {
                     >
                         {'>>'}
                     </Button>
+                </div>
+            </div>
+            <div ref={DeckRef} className="order-4 sm:order-none col-span-4 p-4 space-y-4">
+                <h5 className="text-2xl font-bold">Deck Template</h5>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center gap-6">
+                    <a className='cursor-pointer'>
+                        <div className="flex flex-col border rounded-lg shadow-md bg-gray-50 min-h-56">
+                            <Image src={image} alt="404" className="w-full h-20 object-cover rounded-t-lg bg-gray-950" />
+                            <div className="flex flex-col p-4 flex-1">
+                                <h5 className="text-lg font-bold leading-tight tracking-tight">Why WitchCrafter is the best?</h5>
+                                <p className="text-sm text-gray-600">I'm going to tell you why come see for yourself.</p>
+                                <p className="text-xs mt-auto text-gray-400">by Hakase.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a className='cursor-pointer'>
+                        <div className="flex flex-col border rounded-lg shadow-md bg-gray-50 min-h-56">
+                            <img src="https://pbs.twimg.com/media/FxPpZiNWcAA2uKo?format=jpg&name=4096x4096" alt="404" className="w-full h-20 object-cover rounded-t-lg bg-gray-950" />
+                            <div className="flex flex-col p-4 flex-1">
+                                <h5 className="text-lg font-bold leading-tight tracking-tight">Dark Dragon, Blue-eyes Magician</h5>
+                                <p className="text-sm text-gray-600">this is just nonsense are they even real cards, come find out.</p>
+                                <p className="text-xs mt-auto text-gray-400">by Hakase.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a className='cursor-pointer'>
+                        <div className="flex flex-col border rounded-lg shadow-md bg-gray-50 min-h-56">
+                            <img src="https://i.ytimg.com/vi/Kwcj0GY8WVQ/mqdefault.jpg" alt="404" className="w-full h-20 object-cover rounded-t-lg bg-gray-950" />
+                            <div className="flex flex-col p-4 flex-1">
+                                <h5 className="text-lg font-bold leading-tight tracking-tight">Who need meta? You need waifu!</h5>
+                                <p className="text-sm text-gray-600">list of waifu cards you might interested come see.</p>
+                                <p className="text-xs mt-auto text-gray-400">by Hakase.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a className='cursor-pointer'>
+                        <div className="flex flex-col border rounded-lg shadow-md bg-gray-50 min-h-56">
+                            <img src="https://preview.redd.it/gacrjhyggv4e1.jpeg?auto=webp&s=c41fd34afb415e84dead14e1658da7fa47f88519" alt="404" className="w-full h-20 object-cover rounded-t-lg bg-gray-950" />
+                            <div className="flex flex-col p-4 flex-1">
+                                <h5 className="text-lg font-bold leading-tight tracking-tight">Yet another cute deck you might want to try.</h5>
+                                <p className="text-sm text-gray-600">come check out this deck you will love it.</p>
+                                <p className="text-xs mt-auto text-gray-400">by Hakase.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div className="flex justify-end mt-4">
+                    <a href={`/decks/${name}`} className="text-sm font-semibold cursor-pointer underline">See more</a>
                 </div>
             </div>
         </div>

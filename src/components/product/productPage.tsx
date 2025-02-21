@@ -1,7 +1,7 @@
 // app/product/[name]/page.tsx
 'use client'
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useRef, useState } from "react";
 import AlsoBuy from "./also-buy/also-buy";
 import {
@@ -13,6 +13,7 @@ import {
 import { CartesianGrid, LabelList, Line, LineChart, XAxis, YAxis } from "recharts"
 import { fetchCardData as fetchYuGiOhData } from "@/app/api/yugioh/getall";
 import { fetchCardData as fetchWeissData } from "@/app/api/weiss/getall";
+import { fetchCardInfo as fetchPokemonCard } from "@/app/api/pekomon/getall";
 
 const chartConfig = {
     averagePrice: {
@@ -92,6 +93,20 @@ export default function ProductPage({ name, category }: PageProps) {
                 console.error("Failed to fetch card info:", error);
             }
         }
+
+        if (category === "Pokemon") {
+            try {
+                const card = await fetchPokemonCard(decode_name);
+                setCardInfo({
+                    name: card?.name,
+                    image: card?.image + "/high.png",
+                    description: card?.effect,
+                    market_price: card?.cardmarket_price
+                });
+            } catch (error) {
+                console.error("Failed to fetch card info:", error);
+            }
+        }
     }
 
     useEffect(() => {
@@ -121,7 +136,7 @@ export default function ProductPage({ name, category }: PageProps) {
         <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-3 sm:grid-rows-[auto,1fr]">
 
             <div className="order-1 sm:order-none col-span-4 sm:col-span-2 sm:col-start-2 sm:row-start-1">
-                <h1 className="text-2xl font-bold">{decode_name}</h1>
+                <h1 className="text-2xl font-bold">{cardinfo?.name}</h1>
             </div>
 
             <div className="order-2 p-10 pt-4 col-span-4 sm:order-none sm:row-span-2 sm:col-span-1 bg-muted rounded-lg">

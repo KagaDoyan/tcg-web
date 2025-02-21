@@ -73,7 +73,7 @@ export default function AlsoBuy({ name, category }: AlsoBuyProp) {
                         >
                             {group.map((product) => (
                                 <a
-                                    href={`/product/YuGiOh/${product.name}`}
+                                    href={`/product/YuGiOh/${product.id || product.name}`}
                                     key={product.name}
                                     className="h-full"
                                 >

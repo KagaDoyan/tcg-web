@@ -6,8 +6,8 @@ interface PageProps {
   params: { name: string, category: string };
 }
 
-export default function Page({ params }: PageProps) {
-  const { name, category } = params;
+export default async function Page({ params }: PageProps) {
+  const { name, category } = await params;
   const decode_name = decodeURIComponent(name);
   const decodedCategory = decodeURIComponent(category);
 
